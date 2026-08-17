@@ -1,77 +1,56 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sacolão Menezes - Delivery</title>
+    <title>Sacolão Menezes - IA</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        h1 {
-            color: #2c7a38;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-        }
+        body { font-family: sans-serif; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #2e7d32; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { border: 1px solid #ddd; padding: 10px; text-align: center; border-radius: 8px; }
+        .card img { width: 100px; height: 100px; object-fit: cover; }
+        #chat-box { margin-top: 30px; border-top: 2px solid #2e7d32; padding-top: 20px; }
+        #mensagens { height: 200px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Sacolão Menezes</h1>
-        <p>Confira nossos produtos frescos!</p>
-    </header>
+<div class="container">
+    <h1>Sacolão Menezes</h1>
+    <p style="text-align: center;">Confira nosso cardápio e fale com nossa IA!</p>
+    
+    <div id="cardapio" class="grid"></div>
 
-    <div class="container">
-        <h2>Cardápio Disponível</h2>
-        <ul id="lista-produtos">
-            Carregando produtos...
-        </ul>
+    <div id="chat-box">
+        <h3>Chat com IA</h3>
+        <div id="mensagens"></div>
+        <input type="text" id="inputChat" placeholder="Pergunte sobre receitas...">
+        <button onclick="enviarMensagem()">Enviar</button>
     </div>
+</div>
 
-    <script>
-        // Função para buscar os produtos da API consumindo a rota correta na nuvem
-        fetch('/api/produtos')
-            .then(response => response.json())
-            .then(produtos => {
-                const lista = document.getElementById('lista-produtos');
-                lista.innerHTML = ''; // Limpa o texto de carregando
-
-                produtos.forEach(produto => {
-                    const item = document.createElement('li');
-                    item.innerHTML = `<span>${produto.nome}</span> <strong>R$ ${produto.preco}</strong>`;
-                    lista.appendChild(item);
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao buscar produtos:', error);
-                document.getElementById('lista-produtos').innerHTML = '<li>Erro ao carregar os produtos. Tente novamente mais tarde.</li>';
+<script>
+    // Carregar produtos da API
+    fetch('/api/produtos')
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('cardapio');
+            data.forEach(prod => {
+                container.innerHTML += `
+                    <div class="card">
+                        <img src="${prod.img}" alt="${prod.nome}">
+                        <p><strong>${prod.nome}</strong></p>
+                        <p>R$ ${prod.preco}</p>
+                    </div>
+                `;
             });
-    </script>
+        });
 
+    function enviarMensagem() {
+        // Lógica do chat aqui
+        alert("Enviando para a IA...");
+    }
+</script>
 </body>
 </html>
