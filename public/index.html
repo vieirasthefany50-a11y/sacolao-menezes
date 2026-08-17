@@ -2,55 +2,233 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sacolão Menezes - IA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sacolão Menezes - Hortifrúti Online</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f4f9; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { color: #2e7d32; text-align: center; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
-        .card { border: 1px solid #ddd; padding: 10px; text-align: center; border-radius: 8px; }
-        .card img { width: 100px; height: 100px; object-fit: cover; }
-        #chat-box { margin-top: 30px; border-top: 2px solid #2e7d32; padding-top: 20px; }
-        #mensagens { height: 200px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            color: var(--primary-dark);
+            margin-top: 30px;
+        }
+
+        /* Grade de Produtos */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .card {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            background: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .card p {
+            margin: 8px 0 4px 0;
+            font-weight: 600;
+        }
+
+        .card span {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Área do Chat */
+        #chat-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #mensagens {
+            height: 250px;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg-user {
+            background: #dcf8c6;
+            align-self: flex-end;
+            padding: 10px 14px;
+            border-radius: 10px 10px 0 10px;
+            max-width: 75%;
+            word-break: break-word;
+        }
+
+        .msg-ia {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            align-self: flex-start;
+            padding: 10px 14px;
+            border-radius: 10px 10px 10px 0;
+            max-width: 75%;
+            word-break: break-word;
+        }
+
+        .chat-input-area {
+            display: flex;
+            border-top: 1px solid #ccc;
+            background: #fff;
+            padding: 10px;
+        }
+
+        #inputChat {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Sacolão Menezes</h1>
-    <p style="text-align: center;">Confira nosso cardápio e fale com nossa IA!</p>
+    <p class="subtitle">Produtos frescos direto para a sua casa! Trabalhamos exclusivamente com entregas.</p>
     
+    <h2>Cardápio Disponível</h2>
     <div id="cardapio" class="grid"></div>
 
-    <div id="chat-box">
-        <h3>Chat com IA</h3>
-        <div id="mensagens"></div>
-        <input type="text" id="inputChat" placeholder="Pergunte sobre receitas...">
-        <button onclick="enviarMensagem()">Enviar</button>
+    <h2>Atendimento Virtual / Pedidos</h2>
+    <div id="chat-container">
+        <div id="mensagens">
+            <div class="msg-ia"><strong>Atendente:</strong> Olá! Bem-vindo ao Sacolão Menezes. Como posso ajudar com o seu pedido hoje?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="inputChat" placeholder="Ex: Quero 2 bananas e 1 melancia..." onkeypress="if(event.key === 'Enter') enviarMensagem()">
+            <button onclick="enviarMensagem()">Enviar</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // Carregar produtos da API
+    // Carregar produtos da API automaticamente na tela
     fetch('/api/produtos')
         .then(res => res.json())
         .then(data => {
             const container = document.getElementById('cardapio');
+            container.innerHTML = "";
             data.forEach(prod => {
                 container.innerHTML += `
                     <div class="card">
                         <img src="${prod.img}" alt="${prod.nome}">
-                        <p><strong>${prod.nome}</strong></p>
-                        <p>R$ ${prod.preco}</p>
+                        <p>${prod.nome}</p>
+                        <span>R$ ${prod.preco.toFixed(2)} / ${prod.unidade || 'un'}</span>
                     </div>
                 `;
             });
-        });
+        })
+        .catch(err => console.error("Erro ao carregar cardápio:", err));
 
-    function enviarMensagem() {
-        // Lógica do chat aqui
-        alert("Enviando para a IA...");
+    // Lógica de envio de mensagens para a IA conversando sobre o pedido
+    async function enviarMensagem() {
+        const input = document.getElementById('inputChat');
+        const mensagem = input.value.trim();
+        if (!mensagem) return;
+
+        const mensagensDiv = document.getElementById('mensagens');
+        
+        // Exibe a mensagem do usuário
+        mensagensDiv.innerHTML += `<div class="msg-user"><strong>Você:</strong> ${mensagem}</div>`;
+        input.value = '';
+        mensagensDiv.scrollTop = mensagensDiv.scrollHeight;
+
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mensagem: mensagem })
+            });
+            const data = await res.json();
+            
+            // Exibe a resposta da IA
+            mensagensDiv.innerHTML += `<div class="msg-ia"><strong>Atendente:</strong> ${data.resposta}</div>`;
+            mensagensDiv.scrollTop = mensagensDiv.scrollHeight;
+        } catch (err) {
+            mensagensDiv.innerHTML += `<div class="msg-ia" style="color:red;"><strong>Erro:</strong> Não foi possível comunicar com o atendente virtual.</div>`;
+        }
     }
 </script>
+
 </body>
 </html>
