@@ -1,3 +1,4 @@
+const produtosSacolaol = require('./cardapio.js');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config(); // Carrega as variáveis do arquivo .env de forma segura
@@ -8,7 +9,6 @@ app.use(cors());
 app.use(express.static('public')); // Para servir os arquivos do front-end (index.html, etc.)
 
 // Importa os produtos do cardápio
-const produtosSacolaol = require('./cardapio.js');
 
 // Configuração da IA utilizando a variável de ambiente (Seguro para o GitHub)
 const apiKey = process.env.GEMINI_API_KEY;
