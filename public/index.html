@@ -1,123 +1,77 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍎 Sacolão Menezes - Delivery</title>
+    <title>Sacolão Menezes - Delivery</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; height: 100vh; background: #f4f7f6; }
-        
-        /* Catálogo */
-        #catalogo { width: 60%; overflow-y: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .produto-card { background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; }
-        .produto-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; background-color: #e0e0e0; }
-        .produto-card h3 { font-size: 1rem; color: #333; margin-bottom: 4px; }
-        .produto-card p { color: #2e7d32; font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
-        .produto-card button { background: #ff9800; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; transition: background 0.2s; }
-        .produto-card button:hover { background: #f57c00; }
-
-        /* Chat */
-        #chat-area { width: 40%; border-left: 2px solid #e0e0e0; display: flex; flex-direction: column; background: white; }
-        .chat-header { background: #2e7d32; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 1.1rem; }
-        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #fafafa; }
-        .message { padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; max-width: 90%; line-height: 1.4; word-wrap: break-word; }
-        .user { background: #e8f5e9; color: #1b5e20; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .bot { background: #ffffff; color: #333333; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #e0e0e0; }
-        #input-area { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 5px; background: white; }
-        input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; outline: none; }
-        input:focus { border-color: #2e7d32; }
-        button#send { background: #2e7d32; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        button#send:hover { background: #1b5e20; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #2c7a38;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
-    <div id="catalogo"></div>
-    <div id="chat-area">
-        <div class="chat-header">🍎 Sacolão Menezes</div>
-        <div id="chat-messages">
-            <div class="message bot">Olá! Seja bem-vindo ao <b>Sacolão Menezes</b>! Clique nos produtos ao lado para montar seu pedido ou digite o que deseja.</div>
-        </div>
-        <div id="input-area">
-            <input type="text" id="userInput" placeholder="Digite sua mensagem...">
-            <button id="send">Enviar</button>
-        </div>
+
+    <header>
+        <h1>Sacolão Menezes</h1>
+        <p>Confira nossos produtos frescos!</p>
+    </header>
+
+    <div class="container">
+        <h2>Cardápio Disponível</h2>
+        <ul id="lista-produtos">
+            Carregando produtos...
+        </ul>
     </div>
 
     <script>
-        const produtos = [
-            { id: 1, nome: "Banana", preco: 5.90, unidade: "kg", img: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&auto=format&fit=crop" },
-            { id: 2, nome: "Melancia", preco: 12.00, unidade: "unidade", img: "https://images.unsplash.com/photo-1587049352847-4a222e784d38?w=400&auto=format&fit=crop" },
-            { id: 3, nome: "Maçã", preco: 6.50, unidade: "kg", img: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&auto=format&fit=crop" },
-            { id: 4, nome: "Pera", preco: 8.90, unidade: "kg", img: "https://images.unsplash.com/photo-1514756314117-dff7d2a459cbd?w=400&auto=format&fit=crop" },
-            { id: 5, nome: "Limão", preco: 4.00, unidade: "kg", img: "https://images.unsplash.com/photo-1590502591750-d4784799d3ae?w=400&auto=format&fit=crop" },
-            { id: 6, nome: "Alface", preco: 2.50, unidade: "unidade", img: "https://images.unsplash.com/photo-1622206151343-4e3295f884bc?w=400&auto=format&fit=crop" },
-            { id: 7, nome: "Tomate", preco: 7.50, unidade: "kg", img: "https://images.unsplash.com/photo-1592924357228-9564da86a77a?w=400&auto=format&fit=crop" },
-            { id: 8, nome: "Coentro", preco: 2.00, unidade: "maço", img: "https://images.unsplash.com/photo-1595855759920-86582396756a?w=400&auto=format&fit=crop" },
-            { id: 9, nome: "Uva", preco: 10.00, unidade: "kg", img: "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=400&auto=format&fit=crop" },
-            { id: 10, nome: "Repolho", preco: 4.50, unidade: "unidade", img: "https://images.unsplash.com/photo-1598030343416-d183d298d003?w=400&auto=format&fit=crop" },
-            { id: 11, nome: "Morango", preco: 9.00, unidade: "bandeja", img: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400&auto=format&fit=crop" },
-            { id: 12, nome: "Cebola", preco: 6.00, unidade: "kg", img: "https://images.unsplash.com/photo-1508747703725-719777637510?w=400&auto=format&fit=crop" },
-            { id: 13, nome: "Cenoura", preco: 3.90, unidade: "kg", img: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400&auto=format&fit=crop" },
-            { id: 14, nome: "Batata", preco: 5.50, unidade: "kg", img: "https://images.unsplash.com/photo-1518977676601-b5ff321036b9?w=400&auto=format&fit=crop" },
-            { id: 15, nome: "Abóbora", preco: 6.00, unidade: "kg", img: "https://images.unsplash.com/photo-1570586437567-c08975440e25?w=400&auto=format&fit=crop" },
-            { id: 16, nome: "Manga", preco: 7.00, unidade: "kg", img: "https://images.unsplash.com/photo-1553279768-865429fa0078?w=400&auto=format&fit=crop" }
-        ];
+        // Função para buscar os produtos da API consumindo a rota correta na nuvem
+        fetch('/api/produtos')
+            .then(response => response.json())
+            .then(produtos => {
+                const lista = document.getElementById('lista-produtos');
+                lista.innerHTML = ''; // Limpa o texto de carregando
 
-        const catDiv = document.getElementById('catalogo');
-        produtos.forEach(p => {
-            catDiv.innerHTML += `
-                <div class="produto-card">
-                    <img src="${p.img}" alt="${p.nome}">
-                    <h3>${p.nome}</h3>
-                    <p>R$ ${p.preco.toFixed(2)} / ${p.unidade}</p>
-                    <button onclick="adicionarAoPedido('${p.nome}')">Adicionar</button>
-                </div>
-            `;
-        });
-
-        function adicionarAoPedido(nome) {
-            const input = document.getElementById('userInput');
-            if (input.value) {
-                input.value += ", 1 " + nome;
-            } else {
-                input.value = "Quero adicionar 1 " + nome;
-            }
-            input.focus();
-        }
-
-        async function enviar() {
-            const input = document.getElementById('userInput');
-            const msg = input.value;
-            if(!msg) return;
-            
-            const chatMessages = document.getElementById('chat-messages');
-            chatMessages.innerHTML += `<div class="message user">${escapeHtml(msg)}</div>`;
-            input.value = "";
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            try {
-                const resp = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mensagem: msg })
+                produtos.forEach(produto => {
+                    const item = document.createElement('li');
+                    item.innerHTML = `<span>${produto.nome}</span> <strong>R$ ${produto.preco}</strong>`;
+                    lista.appendChild(item);
                 });
-                const data = await resp.json();
-                chatMessages.innerHTML += `<div class="message bot">${escapeHtml(data.resposta).replace(/\n/g, '<br>')}</div>`;
-            } catch (error) {
-                chatMessages.innerHTML += `<div class="message bot" style="color: red;">Erro ao conectar com o servidor.</div>`;
-            }
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        document.getElementById('send').onclick = enviar;
-        document.getElementById('userInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') enviar();
-        });
+            })
+            .catch(error => {
+                console.error('Erro ao buscar produtos:', error);
+                document.getElementById('lista-produtos').innerHTML = '<li>Erro ao carregar os produtos. Tente novamente mais tarde.</li>';
+            });
     </script>
+
 </body>
 </html>
