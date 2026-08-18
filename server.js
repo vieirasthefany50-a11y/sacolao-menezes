@@ -26,7 +26,7 @@ app.post('/api/chat', async (req, res) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
+                model: "openai/gpt-oss-20b",
                 messages: [
                     {
                         role: "system",
@@ -46,6 +46,7 @@ app.post('/api/chat', async (req, res) => {
             const textoResposta = data.choices[0].message.content;
             res.json({ resposta: textoResposta });
         } else {
+            console.error(JSON.stringify(data));
             res.status(500).json({ resposta: "Erro ao processar resposta da IA." });
         }
 
